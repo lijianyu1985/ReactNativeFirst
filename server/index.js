@@ -17,12 +17,12 @@ let users = [
 
 // We need a function which handles requests and send response
 function handleRequest(request, response) {
-    if (request.url.indexOf('getlist') >= 0) {
+    if (request.url.toLowerCase().indexOf('findusers') >= 0) {
         response.setHeader('Content-Type', 'application/json');
         response.write(JSON.stringify(users));
         response.end();
     }
-    else if (request.url.indexOf('addUser') >= 0) {
+    else if (request.url.toLowerCase().indexOf('adduser') >= 0) {
         let body = '';
         // Get the data as utf8 strings.
         // If an encoding is not set, Buffer objects will be received.

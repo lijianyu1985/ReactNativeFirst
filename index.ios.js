@@ -4,22 +4,44 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, View} from 'react-native';
-import UserList from 'components/UserList';
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  Button
+} from 'react-native';
+import UserList from './components/UserList';
+import AddUser from './components/AddUser';
 
 export default class ReactNativeFirst extends Component {
+  
+    constructor(props) {
+        super(props);
+        this.state = {
+            openAddUser: false,
+            users:[]
+        }
+        this.openAddUser =
+            this.openAddUser.bind(this);
+    }
+
+    openAddUser(visible){
+      this.setState({openAddUser:visible});
+    }
+
   render() {
     return (
       <View style={styles.container}>
-        <UserList/>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <UserList users={this.state.users}/>
+        <AddUser onClose={(users)=>{this.setState({users:users||this.state.users});this.openAddUser(false);}} visible={this.state.openAddUser}/>
+        <Button
+          color="#841584"
+          onPress={()=>{this.openAddUser(true);}}
+          title="Add User"
+          accessibilityLabel="add a user to server"
+        />
       </View>
     );
   }
@@ -28,20 +50,8 @@ export default class ReactNativeFirst extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
-  }
 });
 
 AppRegistry.registerComponent('ReactNativeFirst', () => ReactNativeFirst);

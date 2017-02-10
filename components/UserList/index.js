@@ -49,7 +49,7 @@ export default class UserList extends Component {
     componentWillReceiveProps(nextProps) {
 
         if (this.props.reloadUsersFlag !== nextProps.reloadUsersFlag) {
-            const host = 'http://' + nextProps.ip
+            const host = nextProps.ip
             if (!host) {
                 return;
             }

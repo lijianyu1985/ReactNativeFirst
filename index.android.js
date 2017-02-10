@@ -24,7 +24,7 @@ export default class ReactNativeFirst extends Component {
     this.state = {
       openAddUser: false,
       users: [],
-      ip: '',
+      ip: 'https://reactnativefirst-server-dsqqsllqmt.now.sh',
       reloadUsers: false
     }
     this.openAddUser = this
@@ -52,7 +52,7 @@ export default class ReactNativeFirst extends Component {
           style={{
           fontSize: 30
         }}
-          keyboardType="numeric"
+          //keyboardType="numeric"
           placeholder='IP and port - "ip:port"'
           onChangeText={(ip) => this.setState({ip})}
           value={this.state.ip}/>

@@ -6,11 +6,11 @@ const PORT = 8075;
 
 let users = [
             {
-                'UserName':'Steve',
+                'UserName':'John Smith',
                 'Age':32
             },
             {
-                'UserName':'Jack',
+                'UserName':'Mike',
                 'Age':30
             }
         ];

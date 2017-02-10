@@ -5,66 +5,82 @@
  */
 
 import React, {Component} from 'react';
-import {Text, StyleSheet,ScrollView, View, ListView} from 'react-native';
+import {Text, StyleSheet, ScrollView, View, ListView} from 'react-native';
 import {SERVER_HOST} from './../../constants';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 20
     },
     user: {
+        flex: 1,
         fontSize: 30,
         padding: 12,
-        flexDirection: 'row',
         backgroundColor: 'yellow',
+        alignSelf: 'stretch',
+        textAlign: 'center'
     },
-    list:{
+    list: {
         flex: 1,
         padding: 1,
-        flexDirection: 'row',
     },
     separator: {
         height: StyleSheet.hairlineWidth,
-        backgroundColor: '#8E8E8E',
+        backgroundColor: '#8E8E8E'
     },
+    userView: {
+        flex: 1
+    }
 });
 
 export default class UserList extends Component {
 
     constructor(props) {
         super(props);
-        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-        this.state = {
-            dataSource: ds.cloneWithRows(props.users),
-        };
-    }
-
-    componentWillReceiveProps(nextProps){
-        const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-        this.state = {
-            dataSource: ds.cloneWithRows(nextProps.users),
-        };
-    }
-
-    componentDidMount() {
-        fetch(SERVER_HOST+'findusers').then((response) => response.json()).then((responseJson) => {
-            
-            const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-            this.setState({
-                dataSource: ds.cloneWithRows(responseJson)
-            });
-        }).catch((err) => {
-            console.log(err);
+        const ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
         });
+        this.state = {
+            dataSource: ds.cloneWithRows([])
+        };
     }
+
+    componentWillReceiveProps(nextProps) {
+
+        if (this.props.reloadUsersFlag !== nextProps.reloadUsersFlag) {
+            const host = 'http://' + nextProps.ip
+            if (!host) {
+                return;
+            }
+            fetch(host + '/findusers').then((response) => response.json()).then((responseJson) => {
+
+                const ds = new ListView.DataSource({
+                    rowHasChanged: (r1, r2) => r1 !== r2
+                });
+                this.setState({
+                    dataSource: ds.cloneWithRows(responseJson)
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+    }
+
+    componentDidMount() {}
 
     render() {
-        return (<ScrollView><ListView style={styles.list}
-                    renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        return (
+            <ScrollView>
+                <ListView
+                    style={styles.list}
+                    renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData,index) => 
-                        <Text key={index} style={styles.user}>{rowData.UserName} - {rowData.Age}</Text>}
-                    /></ScrollView>);
+                    renderRow={(rowData, index) => <View style={styles.userView}>
+                    <Text key={index} style={styles.user}>{rowData.UserName}
+                        - {rowData.Age}</Text>
+                </View>}/>
+            </ScrollView>
+        );
     }
 }

@@ -12,10 +12,10 @@ import {
   View,
   Button,
   TouchableHighlight,
-  TextInput
 } from 'react-native';
 import UserList from './components/UserList';
 import AddUser from './components/AddUser';
+import {SERVER_HOST} from './constants';
 
 export default class ReactNativeFirst extends Component {
 
@@ -23,9 +23,7 @@ export default class ReactNativeFirst extends Component {
     super(props);
     this.state = {
       openAddUser: false,
-      users: [],
-      ip: '',
-      reloadUsers: false
+      users: []
     }
     this.openAddUser = this
       .openAddUser
@@ -40,30 +38,20 @@ export default class ReactNativeFirst extends Component {
   }
 
   loadUsers() {
-    this.setState({
-      reloadUsers: !this.state.reloadUsers
+    fetch(SERVER_HOST + '/findusers').then((response) => response.json()).then((responseJson) => {
+      this.setState({users: responseJson});
+      console.log('users loaded');
+    }).catch((err) => {
+      console.log(err);
     });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={{
-          fontSize: 30
-        }}
-          keyboardType="numeric"
-          placeholder='IP and port - "ip:port"'
-          onChangeText={(ip) => this.setState({ip})}
-          value={this.state.ip}/>
-
-        <UserList reloadUsersFlag={this.state.reloadUsers} ip={this.state.ip}/>
+        <UserList users={this.state.users}/>
         <AddUser
-          ip={this.state.ip}
-          onClose={(users) => {
-          this.setState({
-            users: users || this.state.users
-          });
+          onClose={(users) => {/*this.setState({ users: users || this.state.users });*/
           this.openAddUser(false);
         }}
           visible={this.state.openAddUser}/>

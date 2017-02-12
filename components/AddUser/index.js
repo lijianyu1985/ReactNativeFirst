@@ -11,7 +11,8 @@ import {
     StyleSheet,
     View,
     Modal,
-    TextInput
+    TextInput,
+    ToastAndroid
 } from 'react-native';
 import {SERVER_HOST} from './../../constants';
 
@@ -59,8 +60,9 @@ export default class AddUser extends Component {
                 .props
                 .onClose(responseJson);
             this.setState({UserName: '', Age: ''});
+            ToastAndroid.show('user created', ToastAndroid.SHORT);
         }).catch((err) => {
-            console.log(err);
+            ToastAndroid.show(error, ToastAndroid.SHORT);
         });
     }
 

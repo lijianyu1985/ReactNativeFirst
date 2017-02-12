@@ -6,13 +6,8 @@
 
 import React, {Component} from 'react';
 import {Text, StyleSheet, ScrollView, View, ListView} from 'react-native';
-import {SERVER_HOST} from './../../constants';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: 20
-    },
     user: {
         flex: 1,
         fontSize: 30,
@@ -23,7 +18,7 @@ const styles = StyleSheet.create({
     },
     list: {
         flex: 1,
-        padding: 1,
+        padding: 1
     },
     separator: {
         height: StyleSheet.hairlineWidth,
@@ -42,27 +37,17 @@ export default class UserList extends Component {
             rowHasChanged: (r1, r2) => r1 !== r2
         });
         this.state = {
-            dataSource: ds.cloneWithRows([])
+            dataSource: ds.cloneWithRows(props.users || [])
         };
     }
 
     componentWillReceiveProps(nextProps) {
-
-        if (this.props.reloadUsersFlag !== nextProps.reloadUsersFlag) {
-            const host = nextProps.ip
-            if (!host) {
-                return;
-            }
-            fetch(host + '/findusers').then((response) => response.json()).then((responseJson) => {
-
-                const ds = new ListView.DataSource({
-                    rowHasChanged: (r1, r2) => r1 !== r2
-                });
-                this.setState({
-                    dataSource: ds.cloneWithRows(responseJson)
-                });
-            }).catch((err) => {
-                console.log(err);
+        if (this.props.users !== nextProps.users) {
+            const ds = new ListView.DataSource({
+                rowHasChanged: (r1, r2) => r1 !== r2
+            });
+            this.setState({
+                dataSource: ds.cloneWithRows(nextProps.users)
             });
         }
     }
@@ -73,6 +58,7 @@ export default class UserList extends Component {
         return (
             <ScrollView>
                 <ListView
+                    enableEmptySections={true}
                     style={styles.list}
                     renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator}/>}
                     dataSource={this.state.dataSource}

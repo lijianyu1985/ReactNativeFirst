@@ -61,7 +61,7 @@ export default class ReactNativeFirst extends Component {
           onPress={() => {
           this.loadUsers();
         }}>
-          <Text style={styles.fullWidthButtonText}>Load Users</Text>
+          <Text style={styles.fullWidthButtonText}>Click Load Users</Text>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.fullWidthButton}

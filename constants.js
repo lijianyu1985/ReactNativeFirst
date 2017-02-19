@@ -1,1 +1,1 @@
-export const SERVER_HOST = 'https://reactnativefirst-server-dsqqsllqmt.now.sh/';
+export const SERVER_HOST = 'http://192.168.1.179:8075/';
